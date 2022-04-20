@@ -1,57 +1,78 @@
 package ru.yandex.practicum.filmorate;
 
+import model.Film;
+import model.FilmUtils;
+import model.User;
+import model.UserUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.Duration;
+import java.time.LocalDate;
 
 @SpringBootTest
 class FilmorateApplicationTests {
 
-	private HttpClient client = HttpClient.newHttpClient();
 
-	@Test
-	void contextLoads() {
-	}
-//	@Test
-//	void postUserTest() throws IOException, InterruptedException {
-//		URI uri = URI.create("http://localhost:8080/users");
-//		String j = "{\"login\":\"dolore\",\"name\":\"est adipisicing\"," +
-//				"\"email\":\"mail@mail.ru\",\"birthday\":\"1895-12-27\"}";
-//
-//		var request = HttpRequest.newBuilder()
-//				.uri(uri)
-//				.header("Content-Type", "application/json")
-//				.POST(HttpRequest.BodyPublishers.ofString(j))
-//				.build();
-//
-//		HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-//		HttpResponse<String> response = client.send(request, handler);
-//
-//		assertEquals(200, response.statusCode());
-//	}
-//	@Test
-//	void postUserBirthdayTest() throws IOException, InterruptedException {
-//		URI uri = URI.create("http://localhost:8080/users");
-//		String j = "{\"login\":\"dolore\",\"name\":\"est adipisicing\"," +
-//				"\"email\":\"mail@mail.ru\",\"birthday\":\"2022-04-20\"}";
-//
-//		var request = HttpRequest.newBuilder()
-//				.uri(uri)
-//				.header("Content-Type", "application/json")
-//				.POST(HttpRequest.BodyPublishers.ofString(j))
-//				.build();
-//
-//		HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
-//		HttpResponse<String> response = client.send(request, handler);
-//
-//		assertEquals(500, response.statusCode());
-//	}
+    @Test
+    void checkValidUserLogin() {
+        User a = new User("mail@mail.ru", "dolore", "name",
+                LocalDate.of(2020, 1, 15));
+        Assertions.assertTrue(UserUtils.chek(a));
+        User b = new User("mail@mail.ru", " ", "name",
+                LocalDate.of(2020, 1, 15));
+        Assertions.assertFalse(UserUtils.chek(b));
+        User c = new User("mail@mail.ru", null, "name",
+                LocalDate.of(2020, 1, 15));
+        Assertions.assertFalse(UserUtils.chek(c));
+    }
 
+    @Test
+    void checkValidUserEmail() {
+        User a = new User("mail@mail.ru", "dolore", "name",
+                LocalDate.of(2020, 1, 15));
+        Assertions.assertTrue(UserUtils.chek(a));
+        User b = new User("mailmail.ru", "dolore", "name",
+                LocalDate.of(2020, 1, 15));
+        Assertions.assertFalse(UserUtils.chek(b));
+    }
+
+    @Test
+    void checkValidFilmName() {
+        Film a = new Film("name", "description",
+                LocalDate.of(1895, 12, 28), Duration.ofMinutes(10L));
+        Assertions.assertTrue(FilmUtils.chek(a));
+        Film b = new Film("name", "description",
+                LocalDate.of(1895, 12, 27), Duration.ofMinutes(10L));
+        Assertions.assertFalse(FilmUtils.chek(b));
+        Film c = new Film(null, "description",
+                LocalDate.of(1895, 12, 27), Duration.ofMinutes(10L));
+        Assertions.assertFalse(FilmUtils.chek(c));
+    }
+
+    @Test
+    void checkValidFilmDescription() {
+        String testString = "0123456789".repeat(20);
+
+        Film a = new Film("name", "description",
+                LocalDate.of(1895, 12, 28), Duration.ofMinutes(10L));
+        Assertions.assertTrue(FilmUtils.chek(a));
+
+        Film b = new Film("name", testString,
+                LocalDate.of(1895, 12, 27), Duration.ofMinutes(10L));
+        Assertions.assertFalse(FilmUtils.chek(b));
+    }
+
+    @Test
+    void checkValidFilmDuration() {
+        Film a = new Film("name", "description",
+                LocalDate.of(1895, 12, 28), Duration.ofMinutes(10L));
+        Assertions.assertTrue(FilmUtils.chek(a));
+
+        Film b = new Film("name", "description",
+                LocalDate.of(1895, 12, 27), Duration.ofMinutes(-10L));
+        Assertions.assertFalse(FilmUtils.chek(b));
+
+    }
 }

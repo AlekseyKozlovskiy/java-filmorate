@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
 import java.time.Duration;
 import java.time.LocalDate;
 
@@ -36,7 +34,3 @@ public class Film {
         this.duration = duration;
     }
 }
-//    название не может быть пустым;
-//        максимальная длина описания — 200 символов;
-//        дата релиза — не раньше 28 декабря 1895 года;
-//        продолжительность фильма должна быть положительной.

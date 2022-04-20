@@ -33,8 +33,12 @@ public class FilmController {
 
     @PutMapping("/films")
     public Film change(@Valid @RequestBody Film film) {
-        filmMap.put(film.getId(), film);
-        log.info("Данные изменены");
+        if (FilmUtils.chek(film)) {
+            filmMap.put(film.getId(), film);
+            log.info("Данные изменены");
+        } else {
+            throw new ValidationException("Данные не верны");
+        }
         return film;
     }
 }

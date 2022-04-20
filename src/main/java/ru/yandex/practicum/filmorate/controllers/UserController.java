@@ -28,7 +28,7 @@ public class UserController {
                 user.setName(user.getLogin());
             }
             log.info("Добавлена запись: " + user);
-            userMap.put(1l, user);
+            userMap.put(1L, user);
         } else {
             throw new ValidationException("Данные не верны");
         }
