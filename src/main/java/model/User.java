@@ -4,15 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 //@RequiredArgsConstructor
 public class User {
 
     long id;
+    Set<Long> friends = new HashSet<>();
 
     private String email;
-//    @NotBlank
+    //    @NotBlank
     private String login;
     private String name;
 
@@ -27,5 +30,3 @@ public class User {
         this.birthday = birthday;
     }
 }
-//        имя для отображения может быть пустым — в таком случае будет использован логин;
-//        дата рождения не может быть в будущем.
