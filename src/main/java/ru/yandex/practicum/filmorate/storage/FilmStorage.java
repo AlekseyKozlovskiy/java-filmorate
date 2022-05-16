@@ -2,12 +2,13 @@ package ru.yandex.practicum.filmorate.storage;
 
 import model.Film;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface FilmStorage {
-    ArrayList<Film> getFilms();
-    Film getFilm(Long id);
-    Film addFilm(Film film);
-    Film changeFilm(Film film);
+    List<Film> get();
+    Film get(Long id);
+    Film add(Film film);
+    Film change(Film film);
     boolean validate(Film film);
+    void delete(Long id);
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.ValidationException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,17 +18,17 @@ public class InMemoryFilmStorage implements FilmStorage {
     private Map<Long, Film> filmMap = new TreeMap<>();
 
     @Override
-    public ArrayList<Film> getFilms() {
+    public ArrayList<Film> get() {
         return new ArrayList<>(filmMap.values());
     }
 
     @Override
-    public Film getFilm(Long id) {
+    public Film get(Long id) {
         return filmMap.get(id);
     }
 
     @Override
-    public Film addFilm(Film film) {
+    public Film add(Film film) {
         System.out.println(film.getId());
         if (validate(film)) {
             filmMap.put(film.getId(), film);
@@ -40,7 +41,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
 
     @Override
-    public Film changeFilm(Film film) {
+    public Film change(Film film) {
         if (validate(film)) {
             filmMap.put(film.getId(), film);
             log.info("Данные изменены");
@@ -61,10 +62,14 @@ public class InMemoryFilmStorage implements FilmStorage {
                 && !(film.getDescription().isBlank())
                 && (film.getReleaseDate().isAfter(date))
                 && (film.getDuration() > 0);
-
     }
 
     public Map<Long, Film> getFilmMap() {
         return filmMap;
+    }
+
+    @Override
+    public void delete(Long id) {
+        filmMap.remove(id);
     }
 }

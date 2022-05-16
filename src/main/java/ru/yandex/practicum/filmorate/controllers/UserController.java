@@ -33,7 +33,7 @@ public class UserController {
         if (id < 1) {
             throw new IncorrectParameterException(String.format("неверный id пользователя - %d", id));
         }
-        return inMemoryUserStorage.getUser(id);
+        return inMemoryUserStorage.get(id);
     }
 
     @GetMapping("/users/{id}/friends")
@@ -50,12 +50,12 @@ public class UserController {
 
     @PostMapping("/users")
     public User create(@Valid @RequestBody User user) throws ValidationException {
-        return inMemoryUserStorage.createUser(user);
+        return inMemoryUserStorage.create(user);
     }
 
     @PutMapping("/users")
     public User change(@RequestBody User user) throws ValidationException {
-        return inMemoryUserStorage.changeUser(user);
+        return inMemoryUserStorage.change(user);
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
@@ -72,5 +72,12 @@ public class UserController {
                              @PathVariable("friendId") Long friendId) {
 
         return userService.deleteFriend(id, friendId);
+    }
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable("id") Long id) {
+        if (id < 1) {
+            throw new IncorrectParameterException(String.format("неверный id пользователя - %d", id));
+        }
+        inMemoryUserStorage.delete(id);
     }
 }

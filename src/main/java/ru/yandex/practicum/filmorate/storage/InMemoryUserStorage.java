@@ -23,12 +23,12 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User getUser(Long id) {
+    public User get(Long id) {
         return userMap.get(id);
     }
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         if (validate(user)) {
             if (user.getName().isEmpty()) {
                 user.setName(user.getLogin());
@@ -42,7 +42,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User changeUser(User user) {
+    public User change(User user) {
         if (validate(user)) {
             userMap.put(user.getId(), user);
             log.info("Данные изменены");
@@ -68,6 +68,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     public Map<Long, User> getUserMap() {
         return userMap;
+    }
+
+    @Override
+    public void delete(Long id) {
+        userMap.remove(id);
     }
 }
 

@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@RequestMapping("/films")
 public class FilmController {
     private final InMemoryFilmStorage inMemoryFilmStorage;
     private final FilmService filmService;
@@ -23,29 +24,29 @@ public class FilmController {
         this.filmService = filmService;
     }
 
-    @GetMapping("/films")
+    @GetMapping
     public ArrayList<Film> getAll() {
-        return inMemoryFilmStorage.getFilms();
+        return inMemoryFilmStorage.get();
     }
-    @GetMapping("/films/{id}")
+    @GetMapping("/{id}")
     public Film getFilm(@PathVariable("id") Long id) {
         if (id < 1) {
             throw new IncorrectParameterException(String.format("неверный id %d", id));
         }
-        return inMemoryFilmStorage.getFilm(id);
+        return inMemoryFilmStorage.get(id);
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film create(@Valid @RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.addFilm(film);
+        return inMemoryFilmStorage.add(film);
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film change(@Valid @RequestBody Film film) {
-        return inMemoryFilmStorage.changeFilm(film);
+        return inMemoryFilmStorage.change(film);
     }
 
-    @PutMapping("/films/{id}/like/{userId}")
+    @PutMapping("/{id}/like/{userId}")
     public Film addLike(@PathVariable("id") Long id,
                         @PathVariable("userId") Long userId) {
             if (!inMemoryFilmStorage.getFilmMap().containsKey(id)) {
@@ -53,7 +54,7 @@ public class FilmController {
             }
         return filmService.addLike(id, userId);
     }
-    @DeleteMapping("/films/{id}/like/{userId}")
+    @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLike(@PathVariable("id") Long id,
                            @PathVariable("userId") Long userId) {
         if (userId < 0) {
@@ -62,9 +63,15 @@ public class FilmController {
         return filmService.deleteLike(id, userId);
     }
 
-    @GetMapping("/films/popular")
+    @GetMapping("/popular")
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
         return filmService.getPopularFilm(count);
-
+    }
+    @DeleteMapping("/{id}")
+    public void deleteFilm(@PathVariable("id") Long id) {
+        if (id < 1) {
+            throw new IncorrectParameterException(String.format("неверный id %d", id));
+        }
+        inMemoryFilmStorage.delete(id);
     }
 }
