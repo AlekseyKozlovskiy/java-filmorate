@@ -3,52 +3,75 @@ package ru.yandex.practicum.filmorate.controllers;
 import lombok.extern.slf4j.Slf4j;
 import model.Film;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
 
 @RestController
 @Slf4j
+@RequestMapping("/films")
 public class FilmController {
-    private Map<Long, Film> filmMap = new TreeMap<>();
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+    private final FilmService filmService;
 
-    @GetMapping("/films")
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService) {
+        this.inMemoryFilmStorage = inMemoryFilmStorage;
+        this.filmService = filmService;
+    }
+
+    @GetMapping
     public ArrayList<Film> getAll() {
-        return new ArrayList<Film>(filmMap.values());
+        return inMemoryFilmStorage.get();
+    }
+    @GetMapping("/{id}")
+    public Film getFilm(@PathVariable("id") Long id) {
+        if (id < 1) {
+            throw new IncorrectParameterException(String.format("неверный id %d", id));
+        }
+        return inMemoryFilmStorage.get(id);
     }
 
-    @PostMapping("/films")
+    @PostMapping
     public Film create(@Valid @RequestBody Film film) throws ValidationException {
-        if (validate(film)) {
-            filmMap.put(film.getId(), film);
-            log.info("Добавлена запись: " + film);
-        } else {
-            throw new ValidationException("Данные не верны");
-        }
-        return film;
+        return inMemoryFilmStorage.add(film);
     }
 
-    @PutMapping("/films")
+    @PutMapping
     public Film change(@Valid @RequestBody Film film) {
-        if (validate(film)) {
-            filmMap.put(film.getId(), film);
-            log.info("Данные изменены");
-        } else {
-            throw new ValidationException("Данные не верны");
-        }
-        return film;
+        return inMemoryFilmStorage.change(film);
     }
 
-    public static boolean validate(Film film) {
-        LocalDate date = LocalDate.of(1895, 12, 28);
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLike(@PathVariable("id") Long id,
+                        @PathVariable("userId") Long userId) {
+            if (!inMemoryFilmStorage.getFilmMap().containsKey(id)) {
+                throw new IncorrectParameterException(String.format("неверный id %d", id));
+            }
+        return filmService.addLike(id, userId);
+    }
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film deleteLike(@PathVariable("id") Long id,
+                           @PathVariable("userId") Long userId) {
+        if (userId < 0) {
+            throw new IncorrectParameterException(String.format("неверный с id пользователя %d", id));
+        }
+        return filmService.deleteLike(id, userId);
+    }
 
-        return !(film.getName() == null)
-                && !(film.getName().isBlank())
-                && (film.getDescription().length() <= 200)
-                && (film.getReleaseDate().isAfter(date));
+    @GetMapping("/popular")
+    public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
+        return filmService.getPopularFilm(count);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteFilm(@PathVariable("id") Long id) {
+        if (id < 1) {
+            throw new IncorrectParameterException(String.format("неверный id %d", id));
+        }
+        inMemoryFilmStorage.delete(id);
     }
 }
