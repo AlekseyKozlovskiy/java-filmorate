@@ -16,6 +16,7 @@ public class User {
     private Set<Long> friends = new HashSet<>();
 
 
+
     private String email;
     //    @NotBlank
     private String login;
@@ -35,6 +36,7 @@ public class User {
         this.birthday = birthday;
     }
 
+
     public void addRequestFriend(User user){
      usersToApprove.add(user);
     }
@@ -43,4 +45,5 @@ public class User {
         usersToApprove.remove(user);
         friends.add(user.getId());
     }
+
 }

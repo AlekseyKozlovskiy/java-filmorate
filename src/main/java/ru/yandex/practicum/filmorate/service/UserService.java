@@ -17,10 +17,12 @@ public class UserService {
 
     public User addFriend(Long id, Long friendId) {
 
+
         inMemoryUserStorage.getUserMap()
                 .get(id)
                 .getFriends()
                 .add(friendId);
+
         return inMemoryUserStorage.getUserMap().get(id);
     }
 

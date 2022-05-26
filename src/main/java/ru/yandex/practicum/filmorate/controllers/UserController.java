@@ -26,6 +26,7 @@ public class UserController {
     @GetMapping("/users")
     public ArrayList<User> getAll() {
         return inMemoryUserStorage.getAllUsers();
+
     }
 
     @GetMapping("/users/{id}")
@@ -56,6 +57,7 @@ public class UserController {
     @PutMapping("/users")
     public User change(@RequestBody User user) throws ValidationException {
         return inMemoryUserStorage.change(user);
+
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")

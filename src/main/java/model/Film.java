@@ -35,6 +35,7 @@ public class Film {
 //    @JsonDeserialize(using = DurationDeserialize.class)
     private Long duration;
 
+
     public Film(String name, String description, LocalDate releaseDate, Long duration, Genre genre) {
         this.id = NumberGenerator.getFilmId();
         this.name = name;
