@@ -17,7 +17,12 @@ public class UserService {
 
     public User addFriend(Long id, Long friendId) {
 
-        inMemoryUserStorage.getUserMap().get(id).getFriends().add(friendId);
+
+        inMemoryUserStorage.getUserMap()
+                .get(id)
+                .getFriends()
+                .add(friendId);
+
         return inMemoryUserStorage.getUserMap().get(id);
     }
 
@@ -38,6 +43,21 @@ public class UserService {
         Set<Long> use = new HashSet<>(inMemoryUserStorage.getUserMap().get(id).getFriends());
         use.retainAll(inMemoryUserStorage.getUserMap().get(otherId).getFriends());
         return use;
+    }
+
+    public void addToFriendList(User user, User friend){
+        if (user.getUsersToApprove().contains(friend)){
+            approveFriend(user, friend);
+        } else {
+            inMemoryUserStorage.getUserMap().get(friend.getId()).addRequestFriend(user);
+        }
+//        inMemoryUserStorage.getUserMap().get(friend.getId()).addRequestFriend(user);
+//        inMemoryUserStorage.getUserMap().get(user.getId()).addRequestFriend(friend);
+    }
+
+    public void approveFriend(User user, User friend){
+        user.addToFriendsList(friend);
+        friend.addToFriendsList(user);
     }
 
 }

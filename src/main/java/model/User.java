@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,13 +12,18 @@ import java.util.Set;
 //@RequiredArgsConstructor
 public class User {
 
-    long id;
-    Set<Long> friends = new HashSet<>();
+    private long id;
+    private Set<Long> friends = new HashSet<>();
+
+
 
     private String email;
     //    @NotBlank
     private String login;
     private String name;
+
+
+    private Set<User> usersToApprove = new HashSet<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
@@ -29,4 +35,15 @@ public class User {
         this.name = name;
         this.birthday = birthday;
     }
+
+
+    public void addRequestFriend(User user){
+     usersToApprove.add(user);
+    }
+
+    public void addToFriendsList(User user){
+        usersToApprove.remove(user);
+        friends.add(user.getId());
+    }
+
 }

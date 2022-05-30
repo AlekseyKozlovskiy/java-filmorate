@@ -21,6 +21,10 @@ public class Film {
 //    @NotBlank
     private String name;
 
+    private Genre genre;
+
+    private Rating rating;
+
 //    @Length(max = 200)
     private String description;
 
@@ -31,11 +35,13 @@ public class Film {
 //    @JsonDeserialize(using = DurationDeserialize.class)
     private Long duration;
 
-    public Film(String name, String description, LocalDate releaseDate, Long duration) {
+
+    public Film(String name, String description, LocalDate releaseDate, Long duration, Genre genre) {
         this.id = NumberGenerator.getFilmId();
         this.name = name;
         this.description = description;
         this.releaseDate = releaseDate;
         this.duration = duration;
+        this.genre = genre;
     }
 }

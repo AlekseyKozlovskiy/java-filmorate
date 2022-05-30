@@ -26,6 +26,7 @@ public class UserController {
     @GetMapping("/users")
     public ArrayList<User> getAll() {
         return inMemoryUserStorage.getAllUsers();
+
     }
 
     @GetMapping("/users/{id}")
@@ -56,16 +57,19 @@ public class UserController {
     @PutMapping("/users")
     public User change(@RequestBody User user) throws ValidationException {
         return inMemoryUserStorage.change(user);
+
     }
 
     @PutMapping("/users/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable("id") Long id,
+    public User friendRequest(@PathVariable("id") Long id,
                           @PathVariable("friendId") Long friendId) {
         if (id < 1 || friendId < 1) {
             throw new IncorrectParameterException(String.format("неверный id пользователя - %d", id));
         }
+        userService.addToFriendList(inMemoryUserStorage.get(id), inMemoryUserStorage.get(friendId));
         return userService.addFriend(id, friendId);
     }
+
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
     public User deleteFriend(@PathVariable("id") Long id,
