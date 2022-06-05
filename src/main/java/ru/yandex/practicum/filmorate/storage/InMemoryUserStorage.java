@@ -3,19 +3,21 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.extern.slf4j.Slf4j;
 import model.User;
 import org.springframework.stereotype.Component;
+import util.UserValidator;
 
 import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 @Slf4j
+
 public class InMemoryUserStorage implements UserStorage {
-    private Map<Long, User> userMap = new TreeMap<>();
+
+
+    private final Map<Long, User> userMap = new TreeMap<>();
 
     @Override
     public ArrayList<User> getAllUsers() {
@@ -29,7 +31,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User create(User user) {
-        if (validate(user)) {
+        if (UserValidator.validate(user)) {
             if (user.getName().isEmpty()) {
                 user.setName(user.getLogin());
             }
@@ -41,9 +43,9 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    @Override
+
     public User change(User user) {
-        if (validate(user)) {
+        if (UserValidator.validate(user)) {
             userMap.put(user.getId(), user);
             log.info("Данные изменены");
         } else {
@@ -53,17 +55,23 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public boolean validate(User user) {
-        String validEmail = "(.+@.+\\..+)";
-        Pattern p = Pattern.compile(validEmail);
-        Matcher m = p.matcher(user.getEmail());
+    public void addFriend(Long id, Long friendId) {
 
-        return !(user.getEmail().isBlank())
-                && !(user.getLogin() == null)
-                && !(user.getLogin().isBlank())
-                && !(user.getLogin().contains(" "))
-                && !(user.getBirthday().isAfter(LocalDate.now()))
-                && m.matches();
+    }
+
+    @Override
+    public void deleteFriend(Long id, Long friendId) {
+
+    }
+
+    @Override
+    public Set<User> getAllFriends(Long id) {
+        return null;
+    }
+
+    @Override
+    public Set<User> getMutualFriends(Long id, Long friendId) {
+        return null;
     }
 
     public Map<Long, User> getUserMap() {
@@ -74,5 +82,7 @@ public class InMemoryUserStorage implements UserStorage {
     public void delete(Long id) {
         userMap.remove(id);
     }
+
+
 }
 

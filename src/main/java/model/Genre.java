@@ -1,10 +1,8 @@
 package model;
 
-public enum Genre {
-    COMEDY,
-    DRAMA,
-    CARTOON,
-    THRILLER,
-    DOCUMENTARY,
-    ACTION
+import lombok.Data;
+
+@Data
+public class Genre {
+    private Long id;
 }

@@ -11,7 +11,7 @@ import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleIncorrectParameterException(final IncorrectParameterException e) {
+    public ErrorResponse handleIncorrectParameterException(IncorrectParameterException e) {
         return new ErrorResponse(
                 String.format("Ошибка в параметре \"%s\".", e.getParameter())
         );

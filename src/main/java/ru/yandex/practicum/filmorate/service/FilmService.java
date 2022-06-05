@@ -1,34 +1,47 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import model.Film;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FilmService {
-    private InMemoryFilmStorage inMemoryFilmStorage;
-
-    public FilmService(InMemoryFilmStorage inMemoryFilmStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-    }
-    public Film addLike(Long filmId, Long userId) {
-        inMemoryFilmStorage.getFilmMap().get(filmId).getUserLikes().add(userId);
-        return inMemoryFilmStorage.getFilmMap().get(filmId);
+    private final FilmStorage filmStorage;
+    public Film create(Film film) {
+        return filmStorage.create(film);
     }
 
-    public Film deleteLike(Long filmId, Long userId) {
-        inMemoryFilmStorage.getFilmMap().get(filmId).getUserLikes().remove(userId);
-        return inMemoryFilmStorage.getFilmMap().get(filmId);
+    public Film change(Film film) {
+        return filmStorage.change(film);
+    }
+
+    public void delete(Long id) {
+        filmStorage.delete(id);
+    }
+
+    public List<Film> getAll() {
+        return filmStorage.getAll();
+    }
+
+    public void addLike(Long id, Long userId) {
+        filmStorage.addLike(id, userId);
+    }
+
+    public void deleteLike(Long filmId, Long userId) {
+        filmStorage.deleteLike(filmId, userId);
     }
 
     public List<Film> getPopularFilm(Integer count) {
-        return inMemoryFilmStorage.getFilmMap().values().stream()
-                .sorted(Comparator.comparing(e -> -e.getUserLikes().size()))
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilm(count);
     }
+
+    public Film findFilmById(Long id) {
+        return filmStorage.findFilmById(id);
+    }
+
 }

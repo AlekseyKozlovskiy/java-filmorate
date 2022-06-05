@@ -5,10 +5,24 @@ import model.Film;
 import java.util.List;
 
 public interface FilmStorage {
-    List<Film> get();
-    Film get(Long id);
-    Film add(Film film);
+
+    Film create(Film film);
+
     Film change(Film film);
-    boolean validate(Film film);
+
     void delete(Long id);
+
+    List<Film> getAll();
+
+    void addLike(Long id, Long userId);
+
+    void deleteLike(Long filmId, Long userId);
+
+    List<Film> getPopularFilm(Integer count);
+
+    Film findFilmById(Long id);
+
+//    List<Film> get();
+
+
 }

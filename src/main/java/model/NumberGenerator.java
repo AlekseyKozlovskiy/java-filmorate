@@ -7,6 +7,7 @@ public class NumberGenerator {
     public static long getUserId() {
         return userId++;
     }
+
     public static long getFilmId() {
         return filmId++;
     }

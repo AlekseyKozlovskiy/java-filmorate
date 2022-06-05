@@ -1,63 +1,52 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import model.User;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private InMemoryUserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
 
-    public UserService(InMemoryUserStorage inMemoryUserStorage) {
-        this.inMemoryUserStorage = inMemoryUserStorage;
+
+    public User create(User user) {
+        return userStorage.create(user);
     }
 
-    public User addFriend(Long id, Long friendId) {
-
-
-        inMemoryUserStorage.getUserMap()
-                .get(id)
-                .getFriends()
-                .add(friendId);
-
-        return inMemoryUserStorage.getUserMap().get(id);
+    public void delete(Long id) {
+        userStorage.delete(id);
     }
 
-    public User deleteFriend(Long id, Long friendId) {
-        inMemoryUserStorage.getUserMap().get(id).getFriends().remove(friendId);
+    public User change(User user) {
+        return userStorage.change(user);
+    }
 
-        return inMemoryUserStorage.getUserMap().get(id);
+    public List<User> getAllUsers() {
+        return userStorage.getAllUsers();
+    }
+
+    public User get(Long id) {
+        return userStorage.get(id);
+    }
+
+    public void addFriend(Long id, Long friendId) {
+        userStorage.addFriend(id, friendId);
+    }
+
+    public void deleteFriend(Long id, Long friendId) {
+        userStorage.deleteFriend(id, friendId);
     }
 
     public Set<User> getAllFriends(Long id) {
-        Set<Long> friends = inMemoryUserStorage.getUserMap().get(id).getFriends();
-        Set<User> userSet = new HashSet<>();
-        friends.forEach(f -> userSet.add(inMemoryUserStorage.getUserMap().get(f)));
-        return userSet;
+        return userStorage.getAllFriends(id);
     }
 
-    public Set<Long> getMutualFriends(Long id, Long otherId) {
-        Set<Long> use = new HashSet<>(inMemoryUserStorage.getUserMap().get(id).getFriends());
-        use.retainAll(inMemoryUserStorage.getUserMap().get(otherId).getFriends());
-        return use;
+    public Set<User> getMutualFriends(Long id, Long friendId) {
+        return userStorage.getMutualFriends(id, friendId);
     }
-
-    public void addToFriendList(User user, User friend){
-        if (user.getUsersToApprove().contains(friend)){
-            approveFriend(user, friend);
-        } else {
-            inMemoryUserStorage.getUserMap().get(friend.getId()).addRequestFriend(user);
-        }
-//        inMemoryUserStorage.getUserMap().get(friend.getId()).addRequestFriend(user);
-//        inMemoryUserStorage.getUserMap().get(user.getId()).addRequestFriend(friend);
-    }
-
-    public void approveFriend(User user, User friend){
-        user.addToFriendsList(friend);
-        friend.addToFriendsList(user);
-    }
-
 }

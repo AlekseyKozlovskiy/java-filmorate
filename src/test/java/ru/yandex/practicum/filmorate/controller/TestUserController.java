@@ -12,7 +12,7 @@ import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,6 +41,7 @@ public class TestUserController extends FilmorateApplicationTests {
         assertEquals("Sergey", inMemoryUserStorage.getUserMap().get(1L).getName());
 
     }
+
     @Test
     @SneakyThrows
     public void testPutUser() {

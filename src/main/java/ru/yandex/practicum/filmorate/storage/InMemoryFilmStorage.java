@@ -3,9 +3,9 @@ package ru.yandex.practicum.filmorate.storage;
 import lombok.extern.slf4j.Slf4j;
 import model.Film;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import util.FilmValidator;
 
-import javax.validation.ValidationException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,23 +14,37 @@ import java.util.TreeMap;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
-
-    private Map<Long, Film> filmMap = new TreeMap<>();
+    private final Map<Long, Film> filmMap = new TreeMap<>();
 
     @Override
-    public ArrayList<Film> get() {
+    public List<Film> getAll() {
         return new ArrayList<>(filmMap.values());
     }
 
     @Override
-    public Film get(Long id) {
+    public void addLike(Long id, Long userId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void deleteLike(Long filmId, Long userId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<Film> getPopularFilm(Integer count) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Film findFilmById(Long id) {
         return filmMap.get(id);
     }
 
     @Override
-    public Film add(Film film) {
+    public Film create(Film film) {
         System.out.println(film.getId());
-        if (validate(film)) {
+        if (FilmValidator.validate(film)) {
             filmMap.put(film.getId(), film);
             log.info("Добавлена запись: " + film);
         } else {
@@ -42,7 +56,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film change(Film film) {
-        if (validate(film)) {
+        if (FilmValidator.validate(film)) {
             filmMap.put(film.getId(), film);
             log.info("Данные изменены");
         } else {
@@ -50,18 +64,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
         return film;
 
-    }
-
-    @Override
-    public boolean validate(Film film) {
-        LocalDate date = LocalDate.of(1895, 12, 28);
-
-        return !(film.getName() == null)
-                && !(film.getName().isBlank())
-                && (film.getDescription().length() <= 200)
-                && !(film.getDescription().isBlank())
-                && (film.getReleaseDate().isAfter(date))
-                && (film.getDuration() > 0);
     }
 
     public Map<Long, Film> getFilmMap() {
