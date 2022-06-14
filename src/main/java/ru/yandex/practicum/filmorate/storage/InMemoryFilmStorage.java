@@ -22,21 +22,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void addLike(Long id, Long userId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void deleteLike(Long filmId, Long userId) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public List<Film> getPopularFilm(Integer count) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public Film findFilmById(Long id) {
         return filmMap.get(id);
     }

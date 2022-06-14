@@ -8,7 +8,6 @@ import util.UserValidator;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 @Component
@@ -52,26 +51,6 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ValidationException("Данные не верны");
         }
         return user;
-    }
-
-    @Override
-    public void addFriend(Long id, Long friendId) {
-
-    }
-
-    @Override
-    public void deleteFriend(Long id, Long friendId) {
-
-    }
-
-    @Override
-    public Set<User> getAllFriends(Long id) {
-        return null;
-    }
-
-    @Override
-    public Set<User> getMutualFriends(Long id, Long friendId) {
-        return null;
     }
 
     public Map<Long, User> getUserMap() {

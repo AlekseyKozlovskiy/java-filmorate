@@ -12,9 +12,7 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import util.FilmValidator;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -90,23 +88,6 @@ public class FilmDbStorage implements FilmStorage {
             filmList.add(film);
         }
         return filmList;
-    }
-
-    @Override
-    public void addLike(Long id, Long userId) {
-        jdbcTemplate.update("INSERT INTO FILMS.LIKES (USER_ID, FILM_ID) VALUES (?, ?)", userId, id);
-    }
-
-    @Override
-    public void deleteLike(Long filmId, Long userId) {
-        jdbcTemplate.update("DELETE FROM FILMS.LIKES WHERE FILM_ID = ? AND USER_ID = ?", filmId, userId);
-    }
-
-    @Override
-    public List<Film> getPopularFilm(Integer count) {
-        List<Film> filmList = getAll();
-        filmList.sort((o1, o2) -> o2.getUserLikes().size() - o1.getUserLikes().size());
-        return filmList.stream().limit(count).collect(Collectors.toList());
     }
 
     @Override

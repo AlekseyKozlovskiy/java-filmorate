@@ -28,19 +28,11 @@ public class User {
     private LocalDate birthday;
 
     public User(String email, String login, String name, LocalDate birthday) {
-//        this.id = NumberGenerator.getUserId();
         this.email = email;
         this.login = login;
         this.name = name;
         this.birthday = birthday;
     }
-//    public User(Long id, String email, String login, String name, LocalDate birthday) {
-//        this.id = id;
-//        this.email = email;
-//        this.login = login;
-//        this.name = name;
-//        this.birthday = birthday;
-//    }
 
     @Override
     public String toString() {
@@ -58,10 +50,5 @@ public class User {
     public void addRequestFriend(User user) {
         usersToApprove.add(user);
     }
-
-//    public void addToFriendsList(User user){
-//        usersToApprove.remove(user);
-//        friends.add(user.getId());
-//    }
 
 }

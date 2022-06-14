@@ -2,45 +2,17 @@ CREATE SCHEMA IF NOT EXISTs films;
 
 CREATE TABLE IF NOT EXISTS films.users
 (
-    id
-    int
-    primary
-    key,
-    name
-    varchar
-    NOT
-    NULL,
-    birthday
-    date
-    NOT
-    NULL,
-    login
-    varchar
-    NOT
-    NULL,
-    email
-    varchar
-    NOT
-    NULL,
-    CONSTRAINT
-    pk_user
-    PRIMARY
-    KEY
-(
-    id
-)
-    );
+    id int primary  key,
+    name varchar NOT NULL,
+    birthday date NOT NULL,
+    login varchar NOT NULL,
+    email varchar NOT NULL,
+    CONSTRAINT pk_user PRIMARY KEY(id)
+);
 
 CREATE TABLE IF NOT EXISTS films.films
 (
-    id
-    int
-    primary
-    key,
-    name
-    varchar
-    NOT
-    NULL,
+    id int primary key, name varchar NOT NULL,
     description
     varchar
     NOT
