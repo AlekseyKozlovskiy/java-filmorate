@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import ru.yandex.practicum.filmorate.FilmorateApplicationTests;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class FilmDbStorageTest extends BaseDbTest {
 
     private final FilmStorage filmStorage;
+    private final LikeStorage likeStorage;
 //    private final FilmDao filmDao;
 
     @Test
@@ -58,20 +60,20 @@ public class FilmDbStorageTest extends BaseDbTest {
 
     @Test
     public void addLikeTest(){
-        filmStorage.addLike(100L, 102L);
-        Film film = filmStorage.getPopularFilm(1).get(0);
+        likeStorage.addLike(100L, 102L);
+        Film film = likeStorage.getPopularFilm(1).get(0);
         assertEquals("film1", film.getName());
     }
 
     @Test
     public void deleteLikeTest(){
-        filmStorage.deleteLike(100L, 100L);
-        filmStorage.deleteLike(100L, 101L);
-        assertEquals("film2", filmStorage.getPopularFilm(1).get(0).getName() );
+        likeStorage.deleteLike(100L, 100L);
+        likeStorage.deleteLike(100L, 101L);
+        assertEquals("film2", likeStorage.getPopularFilm(1).get(0).getName() );
     }
     @Test
     public void getPopularFilm() {
-        assertEquals("film1", filmStorage.getPopularFilm(1).get(0).getName());
+        assertEquals("film1", likeStorage.getPopularFilm(1).get(0).getName());
 
     }
 

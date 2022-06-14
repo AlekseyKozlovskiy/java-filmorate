@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.FilmorateApplicationTests;
+import ru.yandex.practicum.filmorate.storage.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserDbStorageTest extends BaseDbTest {
 
     private final UserStorage userDbStorage;
+    private final FriendStorage friendStorage;
 
     @Test
     @SneakyThrows
@@ -77,26 +79,26 @@ public class UserDbStorageTest extends BaseDbTest {
 
     @Test
     public void addFriendTest() {
-        int friendCount = userDbStorage.getAllFriends(102l).size();
-        userDbStorage.addFriend(102L, 101L);
-        assertEquals(friendCount + 1, userDbStorage.getAllFriends(102l).size());
+        int friendCount = friendStorage.getAllFriends(102l).size();
+        friendStorage.addFriend(102L, 101L);
+        assertEquals(friendCount + 1, friendStorage.getAllFriends(102l).size());
     }
 
     @Test
     public void deleteFriendTest() {
-        assertEquals(2, userDbStorage.getAllFriends(100L).size());
-        userDbStorage.deleteFriend(100L, 101L);
-        assertEquals(1, userDbStorage.getAllFriends(100L).size());
+        assertEquals(2, friendStorage.getAllFriends(100L).size());
+        friendStorage.deleteFriend(100L, 101L);
+        assertEquals(1, friendStorage.getAllFriends(100L).size());
     }
 
     @Test
     public void getAllFriendsTest() {
-        assertEquals(2, userDbStorage.getAllFriends(100L).size());
+        assertEquals(2, friendStorage.getAllFriends(100L).size());
     }
 
     @Test
     public void getMutualFriendsTest() {
-        assertEquals(1, userDbStorage.getMutualFriends(100L, 101L).size());
+        assertEquals(1, friendStorage.getMutualFriends(100L, 101L).size());
     }
 }
 
