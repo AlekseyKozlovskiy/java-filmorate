@@ -3,14 +3,8 @@ package ru.yandex.practicum.filmorate.dbstorage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import model.User;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
-import ru.yandex.practicum.filmorate.FilmorateApplicationTests;
 import ru.yandex.practicum.filmorate.storage.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
@@ -79,26 +73,26 @@ public class UserDbStorageTest extends BaseDbTest {
 
     @Test
     public void addFriendTest() {
-        int friendCount = friendStorage.getAllFriends(102l).size();
-        friendStorage.addFriend(102L, 101L);
-        assertEquals(friendCount + 1, friendStorage.getAllFriends(102l).size());
+        int friendCount = friendStorage.getAll(102l).size();
+        friendStorage.add(102L, 101L);
+        assertEquals(friendCount + 1, friendStorage.getAll(102l).size());
     }
 
     @Test
     public void deleteFriendTest() {
-        assertEquals(2, friendStorage.getAllFriends(100L).size());
-        friendStorage.deleteFriend(100L, 101L);
-        assertEquals(1, friendStorage.getAllFriends(100L).size());
+        assertEquals(2, friendStorage.getAll(100L).size());
+        friendStorage.delete(100L, 101L);
+        assertEquals(1, friendStorage.getAll(100L).size());
     }
 
     @Test
     public void getAllFriendsTest() {
-        assertEquals(2, friendStorage.getAllFriends(100L).size());
+        assertEquals(2, friendStorage.getAll(100L).size());
     }
 
     @Test
     public void getMutualFriendsTest() {
-        assertEquals(1, friendStorage.getMutualFriends(100L, 101L).size());
+        assertEquals(1, friendStorage.getMutual(100L, 101L).size());
     }
 }
 

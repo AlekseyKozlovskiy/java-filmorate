@@ -5,12 +5,12 @@ import model.Film;
 import java.util.List;
 
 public interface LikeStorage {
-    public void addLike(Long id, Long userId);
+    void add(Long id, Long userId);
 
 
-    public void deleteLike(Long filmId, Long userId);
+    void delete(Long filmId, Long userId);
 
 
-    public List<Film> getPopularFilm(Integer count);
+    List<Film> getPopular(Integer count);
 
 }

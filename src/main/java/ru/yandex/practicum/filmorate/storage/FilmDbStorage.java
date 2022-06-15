@@ -49,12 +49,11 @@ public class FilmDbStorage implements FilmStorage {
         if (film.getId() < 0) {
             throw new IncorrectParameterException("id");
         }
-        jdbcTemplate.update("update FILMS.FILMS set name = ? where id = ?", film.getName(), id);
-        jdbcTemplate.update("update FILMS.FILMS set description = ? where id = ?", film.getDescription(), id);
-        jdbcTemplate.update("update FILMS.FILMS set release_date = ? where id = ?", film.getReleaseDate(), id);
-        jdbcTemplate.update("update FILMS.FILMS set duration = ? where id = ?", film.getDuration(), id);
-        jdbcTemplate.update("update FILMS.FILMS set rating = ? where id = ?", film.getRate().toString(), id);
-        jdbcTemplate.update("update FILMS.GENRE set GENRE_ID = ? where FILM_ID = ?", film.getMpa().getId(), id);
+        final String sql = "UPDATE FILMS.FILMS SET name = ?, description = ?, release_date = ?, duration = ?, rating = ?"
+                + " WHERE id = ?;" +
+                "update FILMS.GENRE set GENRE_ID = ? where FILM_ID = ?";
+        jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
+                film.getRate(), film.getId(),film.getMpa().getId(), id);
         return film;
     }
 
@@ -91,7 +90,7 @@ public class FilmDbStorage implements FilmStorage {
     }
 
     @Override
-    public Film findFilmById(Long id) {
+    public Film findById(Long id) {
         if (id < 1) {
             throw new IncorrectParameterException("id");
         }

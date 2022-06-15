@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import model.Film;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import ru.yandex.practicum.filmorate.FilmorateApplicationTests;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.LikeStorage;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -41,7 +38,7 @@ public class FilmDbStorageTest extends BaseDbTest {
         film.getMpa().setId(1L);
         film.setId(100L);
         filmStorage.change(film);
-        Optional<Film> filmOptional = Optional.of(filmStorage.findFilmById(100L));
+        Optional<Film> filmOptional = Optional.of(filmStorage.findById(100L));
         assertThat(filmOptional).isPresent()
                 .hasValueSatisfying(user1 -> assertThat(user1)
                         .hasFieldOrPropertyWithValue("name", "new nulla"));
@@ -60,26 +57,26 @@ public class FilmDbStorageTest extends BaseDbTest {
 
     @Test
     public void addLikeTest(){
-        likeStorage.addLike(100L, 102L);
-        Film film = likeStorage.getPopularFilm(1).get(0);
+        likeStorage.add(100L, 102L);
+        Film film = likeStorage.getPopular(1).get(0);
         assertEquals("film1", film.getName());
     }
 
     @Test
     public void deleteLikeTest(){
-        likeStorage.deleteLike(100L, 100L);
-        likeStorage.deleteLike(100L, 101L);
-        assertEquals("film2", likeStorage.getPopularFilm(1).get(0).getName() );
+        likeStorage.delete(100L, 100L);
+        likeStorage.delete(100L, 101L);
+        assertEquals("film2", likeStorage.getPopular(1).get(0).getName() );
     }
     @Test
     public void getPopularFilm() {
-        assertEquals("film1", likeStorage.getPopularFilm(1).get(0).getName());
+        assertEquals("film1", likeStorage.getPopular(1).get(0).getName());
 
     }
 
     @Test
     public void findFilmById(){
-        assertEquals("film2", filmStorage.findFilmById(101L).getName());
+        assertEquals("film2", filmStorage.findById(101L).getName());
     }
 
 }

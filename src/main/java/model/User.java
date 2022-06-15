@@ -8,15 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-//@RequiredArgsConstructor
 public class User {
 
     private long id;
     private Set<Long> friends = new HashSet<>();
 
-    //    @Email
     private String email;
-    //    @NotBlank
     private String login;
 
     private String name;

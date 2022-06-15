@@ -30,19 +30,19 @@ public class FilmService {
     }
 
     public void addLike(Long id, Long userId) {
-        likeStorage.addLike(id, userId);
+        likeStorage.add(id, userId);
     }
 
     public void deleteLike(Long filmId, Long userId) {
-        likeStorage.deleteLike(filmId, userId);
+        likeStorage.delete(filmId, userId);
     }
 
     public List<Film> getPopularFilm(Integer count) {
-        return likeStorage.getPopularFilm(count);
+        return likeStorage.getPopular(count);
     }
 
     public Film findFilmById(Long id) {
-        return filmStorage.findFilmById(id);
+        return filmStorage.findById(id);
     }
 
 }

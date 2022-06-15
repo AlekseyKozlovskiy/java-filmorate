@@ -5,11 +5,11 @@ import model.User;
 import java.util.Set;
 
 public interface FriendStorage {
-    void addFriend(Long id, Long friendId);
+    void add(Long id, Long friendId);
 
-    void deleteFriend(Long id, Long friendId);
+    void delete(Long id, Long friendId);
 
-    Set<User> getAllFriends(Long id);
+    Set<User> getAll(Long id);
 
-    Set<User> getMutualFriends(Long id, Long friendId);
+    Set<User> getMutual(Long id, Long friendId);
 }

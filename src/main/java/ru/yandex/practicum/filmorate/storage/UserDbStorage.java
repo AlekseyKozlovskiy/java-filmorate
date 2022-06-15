@@ -47,10 +47,9 @@ public class UserDbStorage implements UserStorage {
         if (user.getId() < 1) {
             throw new IncorrectParameterException("id");
         }
-        jdbcTemplate.update("update FILMS.USERS set email = ? where id = ?", user.getEmail(), id);
-        jdbcTemplate.update("update FILMS.USERS set login = ? where id = ?", user.getLogin(), id);
-        jdbcTemplate.update("update FILMS.USERS set name = ? where id = ?", user.getName(), id);
-        jdbcTemplate.update("update FILMS.USERS set birthday = ? where id = ?", user.getBirthday(), id);
+        final String sql = "UPDATE FILMS.USERS SET email = ?, login = ?, name = ?, birthday = ?"
+                + " WHERE id = ?;";
+        jdbcTemplate.update(sql, user.getEmail(), user.getLogin(),user.getName(),user.getBirthday(), id);
         return user;
     }
 

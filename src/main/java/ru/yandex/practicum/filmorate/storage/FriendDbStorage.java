@@ -15,7 +15,7 @@ public class FriendDbStorage implements FriendStorage {
     private final JdbcTemplate jdbcTemplate;
     private final UserStorage userStorage;
     @Override
-    public void addFriend(Long id, Long friendId) {
+    public void add(Long id, Long friendId) {
         SqlRowSet sqlRowSet = jdbcTemplate
                 .queryForRowSet("SELECT * FROM FILMS.FRIENDS f2 WHERE USER_ID = ? AND FRIEND_ID = ?", friendId, id);
         if (!sqlRowSet.next()) {
@@ -32,14 +32,14 @@ public class FriendDbStorage implements FriendStorage {
     }
 
     @Override
-    public void deleteFriend(Long id, Long friendId) {
+    public void delete(Long id, Long friendId) {
         jdbcTemplate.update("DELETE FROM FILMS.FRIENDS WHERE USER_ID = ? AND FRIEND_ID = ?", id, friendId);
         jdbcTemplate.update("DELETE FROM FILMS.FRIENDS WHERE USER_ID = ? AND FRIEND_ID = ?", friendId, id);
 
     }
 
     @Override
-    public Set<User> getAllFriends(Long id) {
+    public Set<User> getAll(Long id) {
         Set<User> userSet = new HashSet<>();
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT friend_id\n" +
                 "FROM FILMS.FRIENDS f \n" +
@@ -52,9 +52,9 @@ public class FriendDbStorage implements FriendStorage {
     }
 
     @Override
-    public Set<User> getMutualFriends(Long id, Long friendId) {
-        Set<User> use = getAllFriends(id);
-        use.retainAll(getAllFriends(friendId));
+    public Set<User> getMutual(Long id, Long friendId) {
+        Set<User> use = getAll(id);
+        use.retainAll(getAll(friendId));
         return use;
     }
 }
