@@ -11,7 +11,8 @@ import javax.validation.ValidationException;
 import java.io.File;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 public class ValidationTest extends FilmorateApplicationTests {
 
     @Autowired

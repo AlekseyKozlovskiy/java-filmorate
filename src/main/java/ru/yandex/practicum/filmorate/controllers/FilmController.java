@@ -1,77 +1,67 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import model.Film;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.IncorrectParameterException;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @Slf4j
 @RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
-    private final InMemoryFilmStorage inMemoryFilmStorage;
     private final FilmService filmService;
 
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage, FilmService filmService) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-        this.filmService = filmService;
+    @PostMapping()
+    public ResponseEntity<Film> createFilm(@Valid @RequestBody Film film) {
+        return ResponseEntity.ok(filmService.create(film));
     }
 
-    @GetMapping
-    public ArrayList<Film> getAll() {
-        return inMemoryFilmStorage.get();
-    }
     @GetMapping("/{id}")
-    public Film getFilm(@PathVariable("id") Long id) {
-        if (id < 1) {
-            throw new IncorrectParameterException(String.format("неверный id %d", id));
-        }
-        return inMemoryFilmStorage.get(id);
+    public ResponseEntity<Film> getFilm(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(filmService.findFilmById(id));
     }
 
-    @PostMapping
-    public Film create(@Valid @RequestBody Film film) throws ValidationException {
-        return inMemoryFilmStorage.add(film);
+    @GetMapping()
+    public ResponseEntity<List<Film>> getAll() {
+        return ResponseEntity.ok(filmService.getAll());
     }
 
-    @PutMapping
-    public Film change(@Valid @RequestBody Film film) {
-        return inMemoryFilmStorage.change(film);
+    @PutMapping()
+    public ResponseEntity<Film> change(@RequestBody Film film) {
+        return ResponseEntity.ok(filmService.change(film));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteFilm(@PathVariable("id") Long id) {
+        filmService.delete(id);
+        ResponseEntity.ok();
     }
 
     @PutMapping("/{id}/like/{userId}")
     public Film addLike(@PathVariable("id") Long id,
                         @PathVariable("userId") Long userId) {
-            if (!inMemoryFilmStorage.getFilmMap().containsKey(id)) {
-                throw new IncorrectParameterException(String.format("неверный id %d", id));
-            }
-        return filmService.addLike(id, userId);
+        filmService.addLike(id, userId);
+        return null;
     }
+
     @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLike(@PathVariable("id") Long id,
+    public void deleteLike(@PathVariable("id") Long id,
                            @PathVariable("userId") Long userId) {
         if (userId < 0) {
             throw new IncorrectParameterException(String.format("неверный с id пользователя %d", id));
         }
-        return filmService.deleteLike(id, userId);
+        filmService.deleteLike(id, userId);
     }
 
     @GetMapping("/popular")
     public List<Film> getPopularFilms(@RequestParam(defaultValue = "10") Integer count) {
         return filmService.getPopularFilm(count);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteFilm(@PathVariable("id") Long id) {
-        if (id < 1) {
-            throw new IncorrectParameterException(String.format("неверный id %d", id));
-        }
-        inMemoryFilmStorage.delete(id);
     }
 }
